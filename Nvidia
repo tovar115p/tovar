@@ -1,4 +1,4 @@
-Instalar Nvidia
+Instalar Nvidia (No instalar mesa, xorg ni drivers de AMD o Intel)
 sudo pacman -S nvidia linux-headers nvidia-settings nvidia-utils
 
 Agregar Módulos de Kernel
