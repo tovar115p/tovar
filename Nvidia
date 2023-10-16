@@ -1,7 +1,10 @@
 Instalar Nvidia (No instalar mesa, xorg ni drivers de AMD o Intel)
 sudo pacman -S nvidia linux-headers nvidia-settings nvidia-utils
 
-Agregar Módulos de Kernel
+Agregar Módulos de Kernel editando el archivo /etc/mkinitcpio.conf
+sudo vim /etc/mkinitcpio.conf
+
+Agregar dentro
 MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
 
 Reconfigurar Kernel
