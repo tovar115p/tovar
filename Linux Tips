@@ -1,0 +1,16 @@
+Linux Tips
+Para instalar fuentes en el sistema deben moverse los archivos ttf u otf a /usr/share/fonts y ejecutar
+fc-cache -v
+
+Previsualización de archivos en ranger
+vim .config/ranger/rc.conf
+
+Agregar dentro
+set preview_images true
+set preview_images_method  kitty
+
+Limpiar cache
+sudo pacman -Sc
+
+Eliminar paquetes huerfanos
+sudo pacman -Rns $(pacman -Qtdq)
