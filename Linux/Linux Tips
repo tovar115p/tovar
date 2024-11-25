@@ -1,0 +1,26 @@
+Linux Tips
+Para instalar fuentes en el sistema deben moverse los archivos ttf u otf a /usr/share/fonts y ejecutar
+fc-cache -v
+
+Previsualización de archivos en ranger
+vim .config/ranger/rc.conf
+
+Agregar dentro
+set preview_images true
+set preview_images_method  kitty
+
+Limpiar cache
+sudo pacman -Sc
+
+Eliminar paquetes huerfanos
+sudo pacman -Rns $(pacman -Qtdq)
+
+Para bashrc
+[[ $- != *i* ]] && return
+
+alias r='ranger'
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias rc='wf-recorder -r 60 -p b=25M -a -f rcd.mkv -c h264_vaapi -C aac -d /dev/dri/renderD128'
+
+PS1='[\u@\h \W]\$ '

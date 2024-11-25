@@ -1,0 +1,86 @@
+Instalar Nvidia (No instalar mesa, xorg ni drivers de AMD o Intel)
+sudo pacman -S nvidia linux-headers nvidia-settings nvidia-utils
+
+Agregar Módulos de Kernel editando el archivo /etc/mkinitcpio.conf
+sudo vim /etc/mkinitcpio.conf
+
+Agregar dentro
+MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
+
+Reconfigurar Kernel
+sudo mkinitcpio -P
+
+Crear Dir, archivo y agregar Hooks de Nvidia (Evitará que al actualizar se pierdan las configuraciones de kernel)
+sudo mkdir /etc/pacman.d/hooks
+sudo vim /etc/pacman.d/hooks/nvidia.hook
+
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia
+Target=linux
+# Change the linux part above if a different kernel is used
+
+[Action]
+Description=Update NVIDIA module in initcpio
+Depends=mkinitcpio
+When=PostTransaction
+NeedsTargets
+Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
+
+Crear archivo de lista negra de drivers libres
+sudo vim /etc/modprobe.d/blacklist-nouveau.conf
+
+Agregar dentro
+blacklist nouveau
+options nouveau modeset=0
+
+Crear y editar archivo
+sudo vim /etc/modprobe.d/nvidia.conf
+
+Agregar dentro
+options nvidia-drm modeset=1
+
+Editar archivo de GRUB
+sudo vim /etc/default/grub
+
+Agregar dentro
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet nvidia_drm.modeset=1"
+
+Reconfigurar GRUB
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+Reconfigurar Kernel
+sudo mkinitcpio -P
+
+Activar módulo de kernel
+sudo modprobe nvidia
+
+En caso de usar Hyprland como Wm (Debe tenerse un auxiliar de AUR instalado)
+yay -S hyprland-nvidia kitty waybar wofi swayimg
+
+//Para resolución de pantalla
+Editar archivo de configuración de Hyprland
+vim .config/hypr/hyprland.conf
+
+Agregar dentro
+monitor=,highres,auto,1
+
+Editar archivo /etc/environment
+sudo vim /etc/environment
+
+Agregar dentro
+QT_QPA_PLATFORM=wayland
+XDG_SESSION_TYPE=wayland
+
+Se puede instalar envycontrol (opcional)
+yay -S envycontrol
+
+//En caso de querer usar mi repositorio
+sudo pacman -S git
+git clone https://github.com/tovar115p/yosoytovar
+
+Para verificar que el driver privativo sea el utilizado ejecutar
+nvidia-smi

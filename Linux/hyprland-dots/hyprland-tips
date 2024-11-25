@@ -1,0 +1,159 @@
+############### Grabar pantalla ####################################
+
+https://github.com/ammen99/wf-recorder
+
+pacman -S wf-recorder
+wf-recorder -r 60 -p b=25M -a -f rcd.mkv -c h264_vaapi -C aac -d /dev/dri/card1
+
+################ Crear mis propios temas en vim ###########################
+https://vimcolors.org/
+
+##################### Bloqueo y suspensión Hyprland #######################
+Dentro de hyprland.conf escribir
+
+exec-once = ~/.config/scripts/suspend.sh
+
+Crear script llamado suspend.sh (o cualquier nombre, preferiblemente relacionado) en el siguiente directorio (el directorio puede cambiar)
+
+~/.config/scripts/suspend.sh
+
+Dentro del script escribir lo siguiente
+
+!/bin/bash
+swayidle -w \
+timeout 120 ' swaylock ' \
+timeout 400 ' hyprctl dispatch dpms off' \
+timeout 12000 'systemctl suspend' \
+resume ' hyprctl dispatch dpms on' \
+before-sleep 'swaylock'
+
+Dentro del archivo en el siguiente directorio /etc/systemd/logind.conf.d/*.conf escribir 
+HandleLidSwitch=suspend
+
+//Si no existe el directorio o archivo, crearlos
+
+Links de referencia
+https://www.reddit.com/r/hyprland/comments/158jyiv/automatically_suspend_and_hibernate/
+https://bbs.archlinux.org/viewtopic.php?id=272473
+https://github.com/mdeff/dotfiles/blob/master/.config/swaylock/config
+
+Dentro del directorio de scripts dar permisos de ejecución al archivo con
+
+chmod +x suspend.sh
+
+Para configurar Swaylock crear directorio
+
+~/.config/swaylock/
+
+Crear archivo config y dentro pegar lo siguiente
+
+daemonize
+image=.config/swaylock/black_hole.png //puede ser sustituido por la dirección donde se tenga la imagen de bloqueo
+#color=002b36
+#inside-color=002b36
+#inside-color=000000
+indicator-radius=150
+indicator-thickness=20
+
+############## Los alias de la terminal van en .bashrc #############################
+###########     como ejemplo:
+
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias r='ranger'
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias rc='wf-recorder -f test-vaapi.mkv -c h264_vaapi -d /dev/dri/renderD128'
+
+PS1='[\u@\h \W]\$ '
+
+
+############## Si ranger no muestra imagenes instalar #####################################
+
+yay -S python-pillow
+
+############# Para cambiar tema Global en Hyprland ########################################
+
+yay -S nwg-look-bin
+
+################# Para vim #################################
+
+https://www.freecodecamp.org/news/vimrc-configuration-guide-customize-your-vim-editor/
+
+
+Ejecutar
+mkdir -p ~/.vim ~/.vim/autoload ~/.vim/backup ~/.vim/colors ~/.vim/plugged
+
+touch ~/.vimrc
+
+//Copiar configuración del archivo de vimrc
+
+//Para que los plugin funcionen ejecutar
+
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+//Si youcompleteme está revisando la sintaxis en los archivos de programa deshabilitar agregando lo siguiente a .vimrc
+
+"Disable Syntax Check (comportamiento causado por youcompleteme)
+let g:ycm_show_diagnostics_ui = 0
+
+
+#################################### Zathura ################################
+instalar con:
+
+sudo pacman -S zathura zathura-cb zathura-pdf-mupdf 
+
+//el último paquete (*-mupdf sirve para poder abrir libros o archivos en formato epub)
+
+Para visualizar archivos sin el fondo (como si fuera en terminal con transparencia)
+
+Ejecutar:
+
+cd .config
+mkdir zathura
+nano zathurarc
+
+Dentro de .config/zathura/zathurarc poner el contenido ->
+
+set recolor "true"
+set default-bg rgba(0,0,0,0.7)
+set recolor-lightcolor rgba(0,0,0,0)
+set adjust-open "width"
+set guioptions ""
+set first-page-column 1:2
+
+
+######################## config en .config/hypr/hyprland.conf #################################
+
+# Para ajustar la resolución
+monitor=,highres,auto,1
+
+#Teclas del sistema para brillo, música y volumen
+#volumen
+bind =, xf86audioraisevolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ 
+bind =, xf86audiolowervolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bind =, xf86audiomute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+
+#Brillo
+bind=,XF86MonBrightnessDown,exec,brightnessctl set 5%-
+bind=,XF86MonBrightnessUp,exec,brightnessctl set +5% 
+
+#PrintScreen (se debe instalar grim y slurp)
+bind = , Print, exec, grim -g "$(slurp -d)"
+
+#Montar volúmenes (como usb, hdd, ssd, etc) (se debe instalar udiskie y gnome-polkit)
+exec-once = udiskie &
+exec-once = /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+#Configuración de bloqueo y suspensión
+exec-once = swayidle -w
+timeout 1800 'swaylock -f'
+timeout 1805 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
+lock 'sleep 5s; hyprctl dispatch dons off'
+before-sleep 'swaylock -f'

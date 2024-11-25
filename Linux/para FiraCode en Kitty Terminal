@@ -1,0 +1,26 @@
+#Instalar fuente fira code
+yay -S otf-nerd-fonts-fira-code
+sudo pacman -S ttf-fira-code
+sudo pacman -S nerd-fonts
+
+#instalar también fuentes
+YosemiteSanFranciscoFont
+FontAwesome
+yay -S ttf-yosemite-san-francisco-font-git
+yay -S ttf-font-awesome
+
+#Para ajustar settings en kitty
+https://sw.kovidgoyal.net/kitty/conf/
+
+#Fuentes
+font_family      FiraCode Nerd Font Mono
+bold_font        FiraCode Nerd Font Mono
+italic_font      FiraCode Nerd Font Mono
+bold_italic_font FiraCode Nerd Font Mono
+
+#ligaduras
+disable_ligatures never
+
+#características de las fuentes (font features)
+
+font_features +zero +liga
