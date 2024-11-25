@@ -1,8 +1,0 @@
-Purgar paquetes huerfanos en pacman
-sudo pacman -Rs $(pacman -Qtdq)
-
-Purgar paquetes en caché de pacman
-sudo pacman -Sc
-
-Dependencias opcionales de un paquete instalado
-sudo pacman -Qi ranger

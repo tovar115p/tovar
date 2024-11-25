@@ -1,5 +1,0 @@
-https://github.com/kiddae/polybar-themes
-
-https://pythonlang.dev/repo/murzchnvok-polybar-collection/
-
-https://www.deviantart.com/tag/polybar
