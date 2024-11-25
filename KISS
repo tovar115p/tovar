@@ -1,8 +1,0 @@
-Lector Pdf (con soporte para comics)
-sudo pacman -S zathura-pdf-poppler zathura-ps zathura-cb
-
-Ofimática
-sudo pacman -S libreoffice-fresh libreoffice-fresh-es unoconv libcdr libreoffice-extension-texmaths
-
-Gestor de archivos
-sudo pacman -S ranger atool elinks ffmpegthumbnailer libcaca python-pillow transmission-cli w3m ueberzug
